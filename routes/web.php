@@ -54,5 +54,5 @@ Route::middleware(['auth','admin'])->prefix('admin')->name('admin.')->group(func
     Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
     Route::resource('categories', AdminCategoryController::class);
     Route::resource('products', AdminProductController::class);
-    Route::resource('transactions', AdminTransactionController::class);
+    Route::resource('transactions', App\Http\Controllers\Admin\AdminTransactionController::class);
 });

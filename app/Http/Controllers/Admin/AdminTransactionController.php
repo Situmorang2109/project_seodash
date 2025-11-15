@@ -3,33 +3,36 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
 use App\Models\Product;
 use App\Models\Transaction;
-use Illuminate\Http\Request;
 
 class AdminTransactionController extends Controller
 {
     public function index()
     {
-        $transactions = Transaction::with('product')->latest()->get();
+        $transactions = Transaction::with('product')->get();
+
         return view('admin.transactions.index', compact('transactions'));
     }
 
     public function create()
     {
         $products = Product::all();
+
         return view('admin.transactions.create', compact('products'));
     }
 
     public function store(Request $request)
     {
         $request->validate([
-            'name' => 'required|string|max:255',
-            'product_id' => 'required|exists:products,id',
+            'name' => 'required',
+            'product_id' => 'required',
             'type' => 'required|in:in,out',
-            'amount' => 'required|numeric|min:1'
+            'amount' => 'required|numeric|min:1',
         ]);
 
+        // SIMPAN TRANSAKSI
         Transaction::create([
             'name' => $request->name,
             'product_id' => $request->product_id,
@@ -37,16 +40,18 @@ class AdminTransactionController extends Controller
             'amount' => $request->amount,
         ]);
 
-        return redirect()->route('admin.transactions.index')
-                         ->with('success', 'Transaksi berhasil ditambahkan.');
-    }
+        // UPDATE STOCK
+        $product = Product::find($request->product_id);
 
-    public function destroy($id)
-    {
-        $transaction = Transaction::findOrFail($id);
-        $transaction->delete();
+        if ($request->type == 'in') {
+            $product->stock += $request->amount;
+        } else {
+            $product->stock -= $request->amount;
+        }
+
+        $product->save();
 
         return redirect()->route('admin.transactions.index')
-                         ->with('success', 'Transaksi berhasil dihapus.');
+                         ->with('success', 'Transaksi berhasil ditambahkan!');
     }
 }
