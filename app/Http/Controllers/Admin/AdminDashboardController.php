@@ -3,15 +3,18 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\User;
+use App\Models\Category;
+use App\Models\Product;
+use App\Models\Transaction;
 
 class AdminDashboardController extends Controller
 {
     public function index()
     {
-        return view('admin.dashboard', [
-            'totalUsers'  => User::where('role', 'user')->count(),
-            'totalAdmin'  => User::where('role', 'admin')->count(),
+        return view('admin.dashboard.index', [
+            'categoriesCount' => Category::count(),
+            'productsCount' => Product::count(),
+            'transactionsCount' => Transaction::count(),
         ]);
     }
 }

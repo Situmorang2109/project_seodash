@@ -53,7 +53,9 @@ class AdminCategoryController extends Controller
 
     public function show($id)
     {
-        $category = Category::findOrFail($id);
+        $category = Category::with('products')->findOrFail($id);
+
         return view('admin.categories.show', compact('category'));
     }
+
 }
