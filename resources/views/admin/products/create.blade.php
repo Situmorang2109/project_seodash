@@ -1,54 +1,36 @@
 @extends('layouts.main')
 
 @section('content')
+<div class="page-content">
+    <h3 class="fw-bold mb-4">Tambah Product</h3>
 
-<h3>Tambah Product</h3>
+    <form action="{{ route('admin.products.store') }}" method="POST" enctype="multipart/form-data">
+        @csrf
 
-<form action="{{ route('products.store') }}" method="POST" enctype="multipart/form-data">
-    @csrf
-
-    {{-- CATEGORY --}}
-    <div class="mb-3">
         <label>Category</label>
-        <select name="category_id" class="form-control" required>
-            <option value="">--Select Category--</option>
+        <select name="category_id" class="form-control mb-3">
+            <option value="">--Select a Category--</option>
             @foreach($categories as $c)
                 <option value="{{ $c->id }}">{{ $c->name }}</option>
             @endforeach
         </select>
-    </div>
 
-    {{-- NAME --}}
-    <div class="mb-3">
-        <label>Name</label>
-        <input type="text" name="name" class="form-control" required>
-    </div>
-
-    {{-- IMAGE --}}
-    <div class="mb-3">
         <label>Image</label>
-        <input type="file" name="image" class="form-control">
-    </div>
+        <input type="file" name="image" class="form-control mb-3">
 
-    {{-- PRICE --}}
-    <div class="mb-3">
+        <label>Name</label>
+        <input type="text" name="name" class="form-control mb-3">
+
         <label>Price</label>
-        <input type="number" name="price" class="form-control" required>
-    </div>
+        <input type="number" name="price" class="form-control mb-3">
 
-    {{-- STOCK --}}
-    <div class="mb-3">
         <label>Stock</label>
-        <input type="number" name="stock" class="form-control" required>
-    </div>
+        <input type="number" name="stock" class="form-control mb-3">
 
-    {{-- DESCRIPTION --}}
-    <div class="mb-3">
         <label>Description</label>
-        <textarea name="description" class="form-control" rows="4"></textarea>
-    </div>
+        <textarea name="description" class="form-control mb-3" rows="5"></textarea>
 
-    <button class="btn btn-primary">Simpan</button>
-</form>
-
+        <button class="btn btn-primary px-4">Submit</button>
+    </form>
+</div>
 @endsection

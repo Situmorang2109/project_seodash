@@ -1,14 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SEODash</title>
 
-    {{-- CSS --}}
+    {{-- BOOTSTRAP CSS --}}
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css">
-    <link rel="stylesheet" href="/assets/css/style.css">
 
+    {{-- CUSTOM CSS --}}
     <style>
         .layout {
             display: flex;
@@ -18,7 +19,7 @@
 
         .sidebar {
             width: 230px;
-            background: #ffffff;
+            background: white;
             border-right: 1px solid #e5e7eb;
             padding: 20px;
             position: sticky;
@@ -49,48 +50,58 @@
             background: #e2e8f0;
         }
     </style>
-
 </head>
+
 <body>
 
     <div class="layout">
 
-        {{-- Sidebar --}}
+        {{-- SIDEBAR --}}
         @include('partials.sidebar')
 
-        <div class="content w-100">
+        {{-- RIGHT CONTENT --}}
+        <div class="content">
 
-            {{-- NAVBAR (TOP BAR) — DITAMBAHKAN DI SINI --}}
+            {{-- NAVBAR TOP --}}
             <nav class="bg-white shadow-sm px-4 py-3 mb-4 d-flex justify-content-end align-items-center"
-                 style="border-radius: 8px;">
+                style="border-radius: 8px;">
 
-                <<div class="dropdown">
-                    <button class="btn dropdown-toggle d-flex align-items-center" type="button" data-bs-toggle="dropdown">
-                        <img src="{{ asset('assets/images/profile/user-2.jpg') }}" 
-                            alt="profile" 
-                            style="width:36px; height:36px; border-radius:50%; object-fit:cover;">
-                        <span class="ms-2">{{ Auth::user()->name }}</span>
+                <div class="dropdown">
+                    <button class="btn dropdown-toggle d-flex align-items-center" type="button"
+                        data-bs-toggle="dropdown">
+
+                        <img src="{{ asset('assets/images/profile/user-2.jpg') }}" alt="profile"
+                            style="width:36px;height:36px;border-radius:50%;object-fit:cover;">
+
+                        <span class="ms-2">
+                            {{ Auth::check() ? Auth::user()->name : 'Guest' }}
+                        </span>
                     </button>
 
                     <ul class="dropdown-menu dropdown-menu-end">
-                        <li>
-                            <form action="{{ route('logout') }}" method="POST">
-                                @csrf
-                                <button class="dropdown-item">Logout</button>
-                            </form>
-                        </li>
+                        @if(Auth::check())
+                            <li>
+                                <form action="{{ route('logout') }}" method="POST">
+                                    @csrf
+                                    <button class="dropdown-item">Logout</button>
+                                </form>
+                            </li>
+                        @else
+                            <li><a href="{{ route('login') }}" class="dropdown-item">Login</a></li>
+                        @endif
                     </ul>
                 </div>
             </nav>
 
-            {{--Page Content --}}
+            {{-- MAIN PAGE --}}
             @yield('content')
 
         </div>
-
     </div>
 
-    {{-- JS --}}
+    {{-- BOOTSTRAP JS --}}
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>
+
 </body>
+
 </html>

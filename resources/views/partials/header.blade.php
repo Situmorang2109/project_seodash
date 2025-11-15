@@ -19,10 +19,10 @@
 
                   <div class="dropdown-menu dropdown-menu-end dropdown-menu-animate-up">
                       <div class="message-body">
-                          <form action="{{ url('/logout') }}" method="POST">
-                              @csrf
-                              <button class="btn btn-outline-primary mx-3 mt-2 d-block">Logout</button>
-                          </form>
+                         <form action="{{ route('logout') }}" method="POST">
+                            @csrf
+                                <button class="btn btn-outline-primary mx-3 mt-2 d-block">Logout</button>
+                            </form>
                       </div>
                   </div>
               </li>

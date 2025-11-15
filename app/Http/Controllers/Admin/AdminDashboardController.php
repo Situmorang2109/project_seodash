@@ -1,0 +1,17 @@
+<?php
+
+namespace App\Http\Controllers\Admin;
+
+use App\Http\Controllers\Controller;
+use App\Models\User;
+
+class AdminDashboardController extends Controller
+{
+    public function index()
+    {
+        return view('admin.dashboard', [
+            'totalUsers'  => User::where('role', 'user')->count(),
+            'totalAdmin'  => User::where('role', 'admin')->count(),
+        ]);
+    }
+}

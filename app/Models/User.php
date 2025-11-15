@@ -1,9 +1,25 @@
-public function profile()
-{
-    return $this->hasOne(Profile::class);
-}
+<?php
+namespace App\Models;
 
-public function userTransactions()
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
+
+class User extends Authenticatable
 {
-    return $this->hasMany(UserTransaction::class);
+    use HasFactory, Notifiable;
+
+    protected $fillable = ['name','email','password','role'];
+
+    protected $hidden = ['password','remember_token'];
+
+    public function profile()
+    {
+        return $this->hasOne(Profile::class);
+    }
+
+    public function userTransactions()
+    {
+        return $this->hasMany(UserTransaction::class);
+    }
 }

@@ -22,28 +22,29 @@ class UserTransactionController extends Controller
 
     public function create()
     {
-        $products = Product::all();
+        $products = Product::orderBy('name')->get();
         return view('user.transactions.create', compact('products'));
     }
 
     public function store(Request $request)
     {
         $request->validate([
-            'product_id' => 'required',
-            'type' => 'required',
-            'amount' => 'required|numeric',
-            'notes' => 'nullable'
+            'product_id' => 'required|exists:products,id',
+            'type'       => 'required|in:in,out',
+            'amount'     => 'required|numeric|min:1',
+            'notes'      => 'nullable'
         ]);
 
         UserTransaction::create([
-            'user_id' => Auth::id(),
+            'user_id'    => Auth::id(),
             'product_id' => $request->product_id,
-            'type' => $request->type,
-            'amount' => $request->amount,
-            'notes' => $request->notes,
+            'type'       => $request->type,
+            'amount'     => $request->amount,
+            'notes'      => $request->notes,
         ]);
 
-        return redirect()->route('user.transactions')
+        return redirect()
+            ->route('user.transactions')
             ->with('success', 'Transaction Berhasil!');
     }
 }

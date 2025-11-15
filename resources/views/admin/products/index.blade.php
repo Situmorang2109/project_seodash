@@ -1,69 +1,55 @@
 @extends('layouts.main')
 
 @section('content')
+<div class="page-content">
 
-<div class="d-flex justify-content-between mb-4">
-    <h3>List Product</h3>
-    <a href="{{ route('products.create') }}" class="btn btn-primary">Tambah</a>
-</div>
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h3 class="fw-bold">List Product</h3>
 
-@if(session('success'))
-<div class="alert alert-success">{{ session('success') }}</div>
-@endif
-
-<div class="row">
-    @foreach($products as $item)
-    <div class="col-md-4 mb-4">
-        <div class="card shadow-sm">
-
-            <img src="{{ asset('assets/images/products/' . $item->image) }}"
-                 class="card-img-top"
-                 height="250"
-                 style="object-fit: cover">
-
-            <div class="card-body">
-
-                <h5>{{ $item->name }}</h5>
-
-                <p class="text-primary fw-bold">
-                    Rp {{ number_format($item->price) }}
-                </p>
-
-                <p class="text-muted">Stock: {{ $item->stock }}</p>
-
-                <p class="text-muted" style="font-size: 14px;">
-                    {{ Str::limit($item->description, 120) }}
-                </p>
-
-                {{-- READ MORE BUTTON --}}
-                <a href="{{ route('products.show', $item->id) }}" 
-                   class="btn btn-primary w-100 mb-3">
-                    Read More
-                </a>
-
-                {{-- EDIT + DELETE BUTTON (Fixed version) --}}
-                <div class="d-flex gap-2">
-                    <a href="{{ route('products.edit', $item->id) }}" 
-                       class="btn btn-warning w-50">
-                        Edit
-                    </a>
-
-                    <form action="{{ route('products.destroy', $item->id) }}" 
-                          method="POST" 
-                          class="w-50"
-                          onsubmit="return confirm('Yakin ingin menghapus produk ini?')">
-                        @csrf
-                        @method('DELETE')
-                        <button type="submit" class="btn btn-danger w-100">
-                            Delete
-                        </button>
-                    </form>
-                </div>
-
-            </div>
-        </div>
+        <a href="{{ route('admin.products.create') }}" class="btn btn-primary rounded-pill px-4">
+            Tambah
+        </a>
     </div>
-    @endforeach
-</div>
 
+    @if(session('success'))
+        <div class="alert alert-success">{{ session('success') }}</div>
+    @endif
+
+    <div class="row">
+        @foreach($products as $p)
+            <div class="col-md-4 mb-4">
+                <div class="card shadow-sm p-3 h-100">
+
+                    <img src="/assets/images/products/{{ $p->image }}"
+                         class="img-fluid rounded mb-3"
+                         style="width: 100%; height: 250px; object-fit: cover;">
+
+                    <h5 class="fw-bold">
+                        {{ Str::limit($p->name, 40) }}
+                    </h5>
+
+                    <h6 class="text-primary fw-bold">Rp {{ number_format($p->price,0,',','.') }}</h6>
+
+                    <p class="text-muted mb-0">Jumlah Stock: {{ $p->stock }}</p>
+
+                    <p class="small mt-2">{{ Str::limit($p->description, 80) }}</p>
+
+                    <a href="{{ route('admin.products.show', $p->id) }}" class="btn btn-primary w-100 mt-3">Read More</a>
+
+                    <div class="d-flex justify-content-between mt-3">
+                        <a href="{{ route('admin.products.edit', $p->id) }}" class="btn btn-warning w-50 me-2">Edit</a>
+
+                        <form action="{{ route('admin.products.destroy', $p->id) }}" method="POST" class="w-50">
+                            @csrf
+                            @method('DELETE')
+                            <button class="btn btn-danger w-100">Delete</button>
+                        </form>
+                    </div>
+
+                </div>
+            </div>
+        @endforeach
+    </div>
+
+</div>
 @endsection

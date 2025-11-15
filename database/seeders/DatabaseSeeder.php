@@ -3,27 +3,27 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\Hash;
 use App\Models\User;
+use Illuminate\Support\Facades\Hash;
 
 class DatabaseSeeder extends Seeder
 {
     public function run(): void
     {
-        // ✅ BUAT ADMIN DEFAULT
+        // ADMIN DEFAULT
         User::create([
             'name' => 'Admin',
-            'email' => 'admin@example.com',
-            'password' => Hash::make('password'),
+            'email' => 'admin@gmail.com',
+            'password' => Hash::make('password'), // <— password default
             'role' => 'admin',
         ]);
 
-        // Kalau mau tambahkan staff juga bisa
-        // User::create([
-        //     'name' => 'Staff',
-        //     'email' => 'staff@example.com',
-        //     'password' => Hash::make('password'),
-        //     'role' => 'staff',
-        // ]);
+        // USER DEFAULT
+        User::create([
+            'name' => 'User Demo',
+            'email' => 'user@gmail.com',
+            'password' => Hash::make('password'), // <— password default
+            'role' => 'user',
+        ]);
     }
 }

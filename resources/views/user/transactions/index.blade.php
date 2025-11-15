@@ -1,44 +1,63 @@
-@extends('layouts.main')
+@extends('user.layouts.main')
 
 @section('content')
+<div class="container mt-4">
 
-<h2>Tampil Transaction</h2>
+    <h3 class="fw-bold mb-3">Daftar Transaksi Anda</h3>
 
-@if(session('success'))
-    <div class="alert alert-success">{{ session('success') }}</div>
-@endif
+    @if(session('success'))
+        <div class="alert alert-success">{{ session('success') }}</div>
+    @endif
 
-<a href="{{ route('user.transactions.create') }}" class="btn btn-primary mb-3">Input Transaction</a>
+    <a href="{{ route('user.transactions.create') }}" class="btn btn-primary mb-3">
+        Input Transaction
+    </a>
 
-<table class="table table-bordered">
-    <thead>
-        <tr>
-            <th>#</th>
-            <th>Name</th>
-            <th>Product</th>
-            <th>Type(In Out)</th>
-            <th>Amount</th>
-        </tr>
-    </thead>
-    <tbody>
-        @forelse($transactions as $t)
-        <tr>
-            <td>{{ $loop->iteration }}</td>
-            <td>{{ auth()->user()->name }}</td>
-            <td>{{ $t->product->name }}</td>
-            <td>
-                @if($t->type == 'in')
-                    <span class="badge bg-primary">in</span>
-                @else
-                    <span class="badge bg-danger">out</span>
-                @endif
-            </td>
-            <td>{{ $t->amount }}</td>
-        </tr>
-        @empty
-        <tr><td colspan="5">Belum ada transaksi</td></tr>
-        @endforelse
-    </tbody>
-</table>
+    <div class="card">
+        <div class="card-body">
 
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>User</th>
+                        <th>Product</th>
+                        <th>Type</th>
+                        <th>Amount</th>
+                        <th>Notes</th>
+                        <th>Date</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    @forelse($transactions as $t)
+                    <tr>
+                        <td>{{ $loop->iteration }}</td>
+                        <td>{{ auth()->user()->name }}</td>
+                        <td>{{ $t->product->name ?? '-' }}</td>
+
+                        <td>
+                            @if($t->type == 'in')
+                                <span class="badge bg-primary">In</span>
+                            @else
+                                <span class="badge bg-danger">Out</span>
+                            @endif
+                        </td>
+
+                        <td>{{ $t->amount }}</td>
+                        <td>{{ $t->notes ?? '-' }}</td>
+                        <td>{{ $t->created_at->format('d M Y') }}</td>
+                    </tr>
+                    @empty
+                    <tr>
+                        <td colspan="7" class="text-center">Belum ada transaksi</td>
+                    </tr>
+                    @endforelse
+                </tbody>
+
+            </table>
+        </div>
+    </div>
+
+</div>
 @endsection

@@ -8,7 +8,8 @@
     <div class="alert alert-success">{{ session('success') }}</div>
 @endif
 
-<form method="POST" action="{{ route('user.profile.update') }}">
+<<form method="POST" action="{{ route('user.profile.update', $profile->id) }}">
+
     @csrf
 
     <label>Age</label>

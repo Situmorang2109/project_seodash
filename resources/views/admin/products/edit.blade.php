@@ -1,53 +1,38 @@
 @extends('layouts.main')
 
 @section('content')
+<div class="page-content">
+    <h3 class="fw-bold mb-4">Edit Product</h3>
 
-<h3>Edit Product</h3>
+    <form action="{{ route('admin.products.update', $product->id) }}" method="POST" enctype="multipart/form-data">
+        @csrf
+        @method('PUT')
 
-<form action="{{ route('products.update', $product->id) }}" method="POST" enctype="multipart/form-data">
-    @csrf
-    @method('PUT')
-
-    <div class="mb-3">
         <label>Category</label>
-        <select name="category_id" class="form-control">
+        <select name="category_id" class="form-control mb-3">
             @foreach($categories as $c)
-            <option value="{{ $c->id }}" {{ $c->id == $product->category_id ? 'selected' : '' }}>
-                {{ $c->name }}
-            </option>
+                <option value="{{ $c->id }}" {{ $product->category_id == $c->id ? 'selected' : '' }}>
+                    {{ $c->name }}
+                </option>
             @endforeach
         </select>
-    </div>
 
-    <div class="mb-3">
         <label>Change Image</label>
-        <input type="file" class="form-control" name="image">
+        <input type="file" name="image" class="form-control mb-3">
 
-        <img src="{{ asset('assets/images/products/' . $product->image) }}"
-             width="120" class="mt-2 rounded">
-    </div>
-
-    <div class="mb-3">
         <label>Name</label>
-        <input type="text" class="form-control" name="name" value="{{ $product->name }}">
-    </div>
+        <input type="text" name="name" class="form-control mb-3" value="{{ $product->name }}">
 
-    <div class="mb-3">
         <label>Price</label>
-        <input type="number" class="form-control" name="price" value="{{ $product->price }}">
-    </div>
+        <input type="number" name="price" class="form-control mb-3" value="{{ $product->price }}">
 
-    <div class="mb-3">
         <label>Stock</label>
-        <input type="number" class="form-control" name="stock" value="{{ $product->stock }}">
-    </div>
+        <input type="number" name="stock" class="form-control mb-3" value="{{ $product->stock }}">
 
-    <div class="mb-3">
         <label>Description</label>
-        <textarea class="form-control" rows="4" name="description">{{ $product->description }}</textarea>
-    </div>
+        <textarea name="description" class="form-control mb-3" rows="5">{{ $product->description }}</textarea>
 
-    <button class="btn btn-primary">Update</button>
-</form>
-
+        <button class="btn btn-primary px-4">Update</button>
+    </form>
+</div>
 @endsection
