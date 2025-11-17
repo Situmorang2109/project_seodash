@@ -2,85 +2,82 @@
 
 use Illuminate\Support\Facades\Route;
 
-// ========== AUTH (Umum: Admin & User) ==========
+// AUTH GLOBAL (Admin & User)
 use App\Http\Controllers\AuthController;
 
-// ========== ADMIN ==========
+// ADMIN
 use App\Http\Controllers\Admin\AdminDashboardController;
 use App\Http\Controllers\Admin\AdminCategoryController;
 use App\Http\Controllers\Admin\AdminProductController;
 use App\Http\Controllers\Admin\AdminTransactionController;
 
-// ========== USER ==========
+// USER
 use App\Http\Controllers\User\UserDashboardController;
 use App\Http\Controllers\User\UserProductController;
 use App\Http\Controllers\User\UserTransactionController;
 
-// ========== MIDDLEWARE ==========
+// MIDDLEWARE
 use App\Http\Middleware\AdminMiddleware;
 use App\Http\Middleware\UserMiddleware;
 
 
-// =============================================================
-//                         AUTH
-// =============================================================
+// =============================
+// DEFAULT ROUTE -> LOGIN
+// =============================
+Route::get('/', function () {
+    return redirect()->route('login');
+});
+
+
+// =============================
+// AUTH
+// =============================
 Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [AuthController::class, 'login']);
+
+Route::get('/register', [AuthController::class, 'showRegisterForm'])->name('register');
+Route::post('/register', [AuthController::class, 'register']);
+
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
 
-// =============================================================
-//                         ADMIN
-// =============================================================
+// =============================
+// ADMIN
+// =============================
 Route::prefix('admin')
     ->middleware(['auth', AdminMiddleware::class])
     ->group(function () {
 
-        Route::get('/dashboard', [AdminDashboardController::class, 'index'])
-            ->name('admin.dashboard');
+        Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('admin.dashboard');
 
-        Route::resource('/categories', AdminCategoryController::class)
-            ->names('admin.categories');
+        Route::resource('/categories', AdminCategoryController::class)->names('admin.categories');
 
-        Route::resource('/products', AdminProductController::class)
-            ->names('admin.products');
+        Route::resource('/products', AdminProductController::class)->names('admin.products');
 
-        Route::resource('/transactions', AdminTransactionController::class)
-            ->names('admin.transactions');
+        Route::resource('/transactions', AdminTransactionController::class)->names('admin.transactions');
     });
 
 
-// =============================================================
-//                         USER
-// =============================================================
+// =============================
+// USER
+// =============================
 Route::prefix('user')
     ->middleware(['auth', UserMiddleware::class])
     ->group(function () {
 
-        // Dashboard
-        Route::get('/dashboard', [UserDashboardController::class, 'index'])
-            ->name('user.dashboard');
+        Route::get('/dashboard', [UserDashboardController::class, 'index'])->name('user.dashboard');
 
-        // Products
-        Route::get('/products', [UserProductController::class, 'index'])
-            ->name('user.products.index');
+        Route::get('/products', [UserProductController::class, 'index'])->name('user.products.index');
 
-        Route::get('/products/{id}', [UserProductController::class, 'show'])
-            ->name('user.products.show');
+        Route::get('/products/{id}', [UserProductController::class, 'show'])->name('user.products.show');
 
-        // Transactions
-        Route::get('/transactions', [UserTransactionController::class, 'index'])
-            ->name('user.transactions.index');
+        Route::get('/transactions', [UserTransactionController::class, 'index'])->name('user.transactions.index');
 
-        Route::get('/transactions/create', [UserTransactionController::class, 'create'])
-            ->name('user.transactions.create');
+        Route::get('/transactions/create', [UserTransactionController::class, 'create'])->name('user.transactions.create');
 
-        Route::post('/transactions', [UserTransactionController::class, 'store'])
-            ->name('user.transactions.store');
+        Route::post('/transactions', [UserTransactionController::class, 'store'])->name('user.transactions.store');
 
-        // Profile
-        Route::get('/profile', [UserDashboardController::class, 'profile'])
-            ->name('user.profile');
+        Route::get('/profile', [UserDashboardController::class, 'profile'])->name('user.profile');
 
         Route::post('/profile', [UserDashboardController::class, 'updateProfile']);
     });

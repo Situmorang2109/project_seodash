@@ -1,44 +1,52 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Register | SEODash</title>
+    <title>Register User - SEODash</title>
 
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
+
+    <style>
+        body { background: #eef3ff; height: 100vh; }
+        .card { border-radius: 20px; padding: 40px; }
+        button { background: #2f6bff; border-radius: 25px !important; padding: 12px; }
+    </style>
 </head>
-<body class="bg-light">
 
-    <div class="d-flex justify-content-center align-items-center vh-100">
-        <div class="card shadow-sm p-4" style="width: 400px;">
-            <h3 class="text-center mb-4">Daftar</h3>
+<body class="d-flex justify-content-center align-items-center">
 
-            <form action="{{ route('register.post') }}" method="POST">
-                @csrf
-                <div class="mb-3">
-                    <label>Nama</label>
-                    <input type="text" name="name" class="form-control" required>
-                </div>
+    <div class="card shadow-lg col-md-4">
 
-                <div class="mb-3">
-                    <label>Email</label>
-                    <input type="email" name="email" class="form-control" required>
-                </div>
+        <h3 class="text-center mb-1">SEODash</h3>
+        <p class="text-center text-muted">Register User</p>
 
-                <div class="mb-3">
-                    <label>Password</label>
-                    <input type="password" name="password" class="form-control" required>
-                </div>
+        <form action="{{ route('register') }}" method="POST">
+            @csrf
 
-                <button type="submit" class="btn btn-success w-100">Daftar</button>
-            </form>
+            <label>Name</label>
+            <input type="text" name="name" class="form-control mb-3">
+
+            <label>Email Address</label>
+            <input type="email" name="email" class="form-control mb-3">
+
+            <label>Password</label>
+            <input type="password" name="password" class="form-control mb-3">
+
+            <label>Confirm Password</label>
+            <input type="password" name="password_confirmation" class="form-control mb-4">
+
+            <button type="submit" class="btn btn-primary w-100">Submit</button>
 
             <p class="text-center mt-3">
-                Sudah punya akun? <a href="{{ route('login') }}">Login di sini</a>
+                Already have an Account?
+                <a href="{{ route('login') }}">Sign In</a>
             </p>
-        </div>
+
+        </form>
     </div>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>
 </body>
+
 </html>
