@@ -8,12 +8,13 @@ use Illuminate\Support\Facades\Auth;
 
 class UserMiddleware
 {
-    public function handle(Request $request, Closure $next)
-    {
-        if (Auth::check() && Auth::user()->role === 'user') {
-            return $next($request);
-        }
-
-        return redirect('/login')->withErrors(['unauthorized' => 'Akses ditolak. Hanya user yang boleh.']);
+   public function handle($request, Closure $next)
+{
+    if (auth()->check() && auth()->user()->role === 'user') {
+        return $next($request);
     }
+
+    return redirect('/login')->with('error', 'Unauthorized');
+}
+
 }

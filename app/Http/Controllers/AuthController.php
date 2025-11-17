@@ -15,21 +15,23 @@ class AuthController extends Controller
     }
 
     public function login(Request $request)
-    {
-        $credentials = $request->only('email','password');
+{
+    $credentials = $request->validate([
+        'email' => 'required',
+        'password' => 'required',
+    ]);
 
-        if (Auth::attempt($credentials)) {
-            $request->session()->regenerate();
+    if (auth()->attempt($credentials)) {
 
-            $role = Auth::user()->role;
-            if ($role === 'admin') {
-                return redirect()->route('admin.dashboard');
-            }
-            return redirect()->route('user.dashboard');
+        if (auth()->user()->role === 'admin') {
+            return redirect()->route('admin.dashboard');
         }
 
-        return back()->withErrors(['email' => 'Email atau password salah.'])->onlyInput('email');
+        return redirect()->route('user.dashboard');
     }
+
+    return back()->withErrors(['email' => 'Login gagal']);
+}
 
     public function registerForm()
     {

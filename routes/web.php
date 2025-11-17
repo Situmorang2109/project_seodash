@@ -1,59 +1,86 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+
+// ========== AUTH (Umum: Admin & User) ==========
 use App\Http\Controllers\AuthController;
-use App\Http\Controllers\DashboardController;
 
-// User controllers
-use App\Http\Controllers\User\UserDashboardController;
-use App\Http\Controllers\User\UserProductController;
-use App\Http\Controllers\User\UserProfileController;
-use App\Http\Controllers\User\UserTransactionController;
-
-// Admin controllers (resource controllers)
+// ========== ADMIN ==========
 use App\Http\Controllers\Admin\AdminDashboardController;
 use App\Http\Controllers\Admin\AdminCategoryController;
 use App\Http\Controllers\Admin\AdminProductController;
 use App\Http\Controllers\Admin\AdminTransactionController;
 
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-*/
+// ========== USER ==========
+use App\Http\Controllers\User\UserDashboardController;
+use App\Http\Controllers\User\UserProductController;
+use App\Http\Controllers\User\UserTransactionController;
 
-Route::get('/', fn() => redirect()->route('login'));
+// ========== MIDDLEWARE ==========
+use App\Http\Middleware\AdminMiddleware;
+use App\Http\Middleware\UserMiddleware;
 
-// AUTH
-Route::get('/login', [AuthController::class, 'loginForm'])->name('login');
-Route::post('/login', [AuthController::class, 'login'])->name('login.post');
-Route::get('/register', [AuthController::class, 'registerForm'])->name('register');
-Route::post('/register', [AuthController::class, 'register'])->name('register.post');
+
+// =============================================================
+//                         AUTH
+// =============================================================
+Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
+Route::post('/login', [AuthController::class, 'login']);
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
-// USER ROUTES (grouped, names prefixed `user.`)
-Route::middleware(['auth','user'])->prefix('user')->name('user.')->group(function () {
-    Route::get('/dashboard', [UserDashboardController::class, 'index'])->name('dashboard');
 
-    Route::get('/products', [UserProductController::class, 'index'])->name('products.index');
-    Route::get('/products/{id}', [UserProductController::class, 'show'])->name('products.show');
+// =============================================================
+//                         ADMIN
+// =============================================================
+Route::prefix('admin')
+    ->middleware(['auth', AdminMiddleware::class])
+    ->group(function () {
 
-    Route::get('/transactions', [UserTransactionController::class, 'index'])->name('transactions.index');
-    Route::get('/transactions/create', [UserTransactionController::class, 'create'])->name('transactions.create');
-    Route::post('/transactions/store', [UserTransactionController::class, 'store'])->name('transactions.store');
+        Route::get('/dashboard', [AdminDashboardController::class, 'index'])
+            ->name('admin.dashboard');
 
-    Route::get('/profile', [UserProfileController::class, 'index'])->name('profile.index');
-    Route::get('/profile/create', [UserProfileController::class, 'create'])->name('profile.create');
-    Route::post('/profile/store', [UserProfileController::class, 'store'])->name('profile.store');
-    Route::get('/profile/edit', [UserProfileController::class, 'edit'])->name('profile.edit');
-    Route::post('/profile/update', [UserProfileController::class, 'update'])->name('profile.update');
-});
+        Route::resource('/categories', AdminCategoryController::class)
+            ->names('admin.categories');
 
-// ADMIN ROUTES
-Route::middleware(['auth','admin'])->prefix('admin')->name('admin.')->group(function () {
-    Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
-    Route::resource('categories', AdminCategoryController::class);
-    Route::resource('products', AdminProductController::class);
-    Route::resource('transactions', App\Http\Controllers\Admin\AdminTransactionController::class);
+        Route::resource('/products', AdminProductController::class)
+            ->names('admin.products');
 
-});
+        Route::resource('/transactions', AdminTransactionController::class)
+            ->names('admin.transactions');
+    });
+
+
+// =============================================================
+//                         USER
+// =============================================================
+Route::prefix('user')
+    ->middleware(['auth', UserMiddleware::class])
+    ->group(function () {
+
+        // Dashboard
+        Route::get('/dashboard', [UserDashboardController::class, 'index'])
+            ->name('user.dashboard');
+
+        // Products
+        Route::get('/products', [UserProductController::class, 'index'])
+            ->name('user.products.index');
+
+        Route::get('/products/{id}', [UserProductController::class, 'show'])
+            ->name('user.products.show');
+
+        // Transactions
+        Route::get('/transactions', [UserTransactionController::class, 'index'])
+            ->name('user.transactions.index');
+
+        Route::get('/transactions/create', [UserTransactionController::class, 'create'])
+            ->name('user.transactions.create');
+
+        Route::post('/transactions', [UserTransactionController::class, 'store'])
+            ->name('user.transactions.store');
+
+        // Profile
+        Route::get('/profile', [UserDashboardController::class, 'profile'])
+            ->name('user.profile');
+
+        Route::post('/profile', [UserDashboardController::class, 'updateProfile']);
+    });
