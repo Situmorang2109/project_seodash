@@ -1,4 +1,4 @@
-@extends('layouts.main')
+@extends('user.layouts.main')
 
 @section('content')
 <div class="container mt-4">
@@ -13,6 +13,10 @@
                 <strong>Rp {{ number_format($p->price) }}</strong>
                 <p>Stock: {{ $p->stock }}</p>
                 <p>{{ Str::limit($p->description, 100) }}</p>
+
+                <a href="{{ route('user.products.show', $p->id) }}" class="btn btn-primary mt-2">
+                    Detail
+                </a>
             </div>
         </div>
         @endforeach

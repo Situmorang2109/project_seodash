@@ -15,7 +15,7 @@
         <ul class="dropdown-menu dropdown-menu-end">
             @if(Auth::check())
                 <li>
-                    <a href="{{ route('user.profile.index') }}" class="dropdown-item">My Profile</a>
+                   <a href="{{ route('user.profile') }}" class="dropdown-item">My Profile</a>
                 </li>
                 <li><hr class="dropdown-divider"></li>
                 <li>

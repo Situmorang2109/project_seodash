@@ -2,7 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 
-// AUTH GLOBAL (Admin & User)
+// AUTH
 use App\Http\Controllers\AuthController;
 
 // ADMIN
@@ -21,17 +21,11 @@ use App\Http\Middleware\AdminMiddleware;
 use App\Http\Middleware\UserMiddleware;
 
 
-// =============================
-// DEFAULT ROUTE -> LOGIN
-// =============================
-Route::get('/', function () {
-    return redirect()->route('login');
-});
+// Default → Login
+Route::get('/', fn() => redirect()->route('login'));
 
 
-// =============================
 // AUTH
-// =============================
 Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [AuthController::class, 'login']);
 
@@ -41,43 +35,49 @@ Route::post('/register', [AuthController::class, 'register']);
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
 
-// =============================
-// ADMIN
-// =============================
-Route::prefix('admin')
-    ->middleware(['auth', AdminMiddleware::class])
-    ->group(function () {
+// ADMIN PANEL
+Route::prefix('admin')->middleware(['auth', AdminMiddleware::class])->group(function () {
 
-        Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('admin.dashboard');
+    Route::get('/dashboard', [AdminDashboardController::class, 'index'])
+        ->name('admin.dashboard');
 
-        Route::resource('/categories', AdminCategoryController::class)->names('admin.categories');
+    Route::resource('/categories', AdminCategoryController::class)
+        ->names('admin.categories');
 
-        Route::resource('/products', AdminProductController::class)->names('admin.products');
+    Route::resource('/products', AdminProductController::class)
+        ->names('admin.products');
 
-        Route::resource('/transactions', AdminTransactionController::class)->names('admin.transactions');
-    });
+    Route::resource('/transactions', AdminTransactionController::class)
+        ->names('admin.transactions');
+});
 
 
-// =============================
-// USER
-// =============================
-Route::prefix('user')
-    ->middleware(['auth', UserMiddleware::class])
-    ->group(function () {
+// USER PANEL
+Route::prefix('user')->middleware(['auth', UserMiddleware::class])->group(function () {
 
-        Route::get('/dashboard', [UserDashboardController::class, 'index'])->name('user.dashboard');
+    Route::get('/dashboard', [UserDashboardController::class, 'index'])
+        ->name('user.dashboard');
 
-        Route::get('/products', [UserProductController::class, 'index'])->name('user.products.index');
+    // Products
+    Route::get('/products', [UserProductController::class, 'index'])
+        ->name('user.products.index');
 
-        Route::get('/products/{id}', [UserProductController::class, 'show'])->name('user.products.show');
+    Route::get('/products/{id}', [UserProductController::class, 'show'])
+        ->name('user.products.show');
 
-        Route::get('/transactions', [UserTransactionController::class, 'index'])->name('user.transactions.index');
+    // Transactions
+    Route::get('/transactions', [UserTransactionController::class, 'index'])
+        ->name('user.transactions.index');
 
-        Route::get('/transactions/create', [UserTransactionController::class, 'create'])->name('user.transactions.create');
+    Route::get('/transactions/create', [UserTransactionController::class, 'create'])
+        ->name('user.transactions.create');
 
-        Route::post('/transactions', [UserTransactionController::class, 'store'])->name('user.transactions.store');
+    Route::post('/transactions', [UserTransactionController::class, 'store'])
+        ->name('user.transactions.store');
 
-        Route::get('/profile', [UserDashboardController::class, 'profile'])->name('user.profile');
+    // Profile
+    Route::get('/profile', [UserDashboardController::class, 'profile'])
+        ->name('user.profile');
 
-        Route::post('/profile', [UserDashboardController::class, 'updateProfile']);
-    });
+    Route::post('/profile', [UserDashboardController::class, 'updateProfile']);
+});

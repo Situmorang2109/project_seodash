@@ -40,11 +40,13 @@ class AdminTransactionController extends Controller
         ]);
 
         Transaction::create([
-            'name'       => $request->name,
+            'name' => $request->name,
             'product_id' => $request->product_id,
-            'type'       => $request->type,
-            'amount'     => $request->amount,
+            'type' => $request->type,
+            'amount' => $request->amount,
+            'user_id' => auth()->id(), // FIX
         ]);
+
 
         return redirect()
             ->route('admin.transactions.index')
