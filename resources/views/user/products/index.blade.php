@@ -8,8 +8,9 @@
         @foreach($products as $p)
         <div class="col-md-4 mb-4">
             <div class="card p-3">
-                <img src="{{ asset('assets/images/products/' . $p->image) }}" class="img-fluid mb-2">
-                <h5>{{ $p->name }}</h5>
+                <img src="/assets/images/products/{{ $p->image }}"
+                         class="img-fluid rounded mb-3"
+                         style="width: 100%; height: 250px; object-fit: cover;">
                 <strong>Rp {{ number_format($p->price) }}</strong>
                 <p>Stock: {{ $p->stock }}</p>
                 <p>{{ Str::limit($p->description, 100) }}</p>
