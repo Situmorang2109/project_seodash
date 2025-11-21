@@ -35,49 +35,40 @@ Route::post('/register', [AuthController::class, 'register']);
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
 
-// ADMIN PANEL
-Route::prefix('admin')->middleware(['auth', AdminMiddleware::class])->group(function () {
+Route::prefix('admin')
+    ->middleware(['auth', AdminMiddleware::class])
+    ->group(function () {
 
-    Route::get('/dashboard', [AdminDashboardController::class, 'index'])
-        ->name('admin.dashboard');
+        Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('admin.dashboard');
 
-    Route::resource('/categories', AdminCategoryController::class)
-        ->names('admin.categories');
+        Route::resource('/categories', AdminCategoryController::class)->names([
+            'index' => 'admin.categories.index',
+            'create' => 'admin.categories.create',
+            'store' => 'admin.categories.store',
+            'show' => 'admin.categories.show',
+            'edit' => 'admin.categories.edit',
+            'update' => 'admin.categories.update',
+            'destroy' => 'admin.categories.destroy',
+        ]);
 
-    Route::resource('/products', AdminProductController::class)
-        ->names('admin.products');
-
-    Route::resource('/transactions', AdminTransactionController::class)
-        ->names('admin.transactions');
-});
+        Route::resource('/products', AdminProductController::class)->names('admin.products');
+        Route::resource('/transactions', AdminTransactionController::class)->names('admin.transactions');
+    });
 
 
-// USER PANEL
-Route::prefix('user')->middleware(['auth', UserMiddleware::class])->group(function () {
+Route::prefix('user')
+    ->middleware(['auth', UserMiddleware::class])
+    ->group(function () {
 
-    Route::get('/dashboard', [UserDashboardController::class, 'index'])
-        ->name('user.dashboard');
+        Route::get('/dashboard', [UserDashboardController::class, 'index'])->name('user.dashboard');
 
-    // Products
-    Route::get('/products', [UserProductController::class, 'index'])
-        ->name('user.products.index');
+        Route::get('/products', [UserProductController::class, 'index'])->name('user.products.index');
+        Route::get('/products/{id}', [UserProductController::class, 'show'])->name('user.products.show');
 
-    Route::get('/products/{id}', [UserProductController::class, 'show'])
-        ->name('user.products.show');
+        Route::get('/transactions', [UserTransactionController::class, 'index'])->name('user.transactions.index');
+        Route::get('/transactions/create', [UserTransactionController::class, 'create'])->name('user.transactions.create');
+        Route::post('/transactions', [UserTransactionController::class, 'store'])->name('user.transactions.store');
 
-    // Transactions
-    Route::get('/transactions', [UserTransactionController::class, 'index'])
-        ->name('user.transactions.index');
-
-    Route::get('/transactions/create', [UserTransactionController::class, 'create'])
-        ->name('user.transactions.create');
-
-    Route::post('/transactions', [UserTransactionController::class, 'store'])
-        ->name('user.transactions.store');
-
-    // Profile
-    Route::get('/profile', [UserDashboardController::class, 'profile'])
-        ->name('user.profile');
-
-    Route::post('/profile', [UserDashboardController::class, 'updateProfile']);
-});
+        Route::get('/profile', [UserDashboardController::class, 'profile'])->name('user.profile');
+        Route::post('/profile', [UserDashboardController::class, 'updateProfile'])->name('user.profile.update');
+    });

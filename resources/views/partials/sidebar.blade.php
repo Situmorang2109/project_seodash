@@ -1,30 +1,15 @@
 <div class="sidebar">
+    <h4 class="px-3 py-3">ADMIN PANEL</h4>
 
-    <h4 class="fw-bold mb-4">ADMIN PANEL</h4>
+    <ul class="nav flex-column">
+        <li><a href="{{ route('admin.dashboard') }}" class="nav-link">Dashboard</a></li>
+        <li><a href="{{ route('admin.categories.index') }}" class="nav-link">Categories</a></li>
+        <li><a href="{{ route('admin.products.index') }}" class="nav-link">Products</a></li>
+        <li><a href="{{ route('admin.transactions.index') }}" class="nav-link">Transactions</a></li>
+    </ul>
 
-    <a href="{{ route('admin.dashboard') }}" 
-       class="menu-link {{ request()->routeIs('admin.dashboard') ? 'active' : '' }}">
-        Dashboard
-    </a>
-
-    <a href="{{ route('admin.categories.index') }}" 
-       class="menu-link {{ request()->routeIs('admin.categories.*') ? 'active' : '' }}">
-        Categories
-    </a>
-
-    <a href="{{ route('admin.products.index') }}" 
-       class="menu-link {{ request()->routeIs('admin.products.*') ? 'active' : '' }}">
-        Products
-    </a>
-
-    <a href="{{ route('admin.transactions.index') }}" 
-       class="menu-link {{ request()->routeIs('admin.transactions.*') ? 'active' : '' }}">
-        Transactions
-    </a>
-
-    <form action="{{ route('logout') }}" method="POST">
+    <form action="{{ route('logout') }}" method="POST" class="m-3">
         @csrf
-        <button class="btn btn-danger w-100 mt-3">Logout</button>
+        <button class="btn btn-danger w-100">Logout</button>
     </form>
-
 </div>
