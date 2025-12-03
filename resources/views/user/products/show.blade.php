@@ -1,32 +1,50 @@
-@extends('user.layouts.main')
+@extends('layouts.main')
 
 @section('content')
-<h3 class="fw-bold mb-4">Detail Product</h3>
 
-<div class="card p-4">
-    <div class="row">
-        <div class="col-md-4">
-            <img src="{{ asset('assets/images/products/' . $product->image) }}"
-                     class="img-fluid rounded border"
-                     style="max-height: 450px; object-fit: cover;">
+<div class="container">
+
+    <div class="card p-4 shadow-sm" style="border-radius: 14px;">
+
+        <div class="row">
+
+            {{-- PRODUCT IMAGE --}}
+            <div class="col-md-5 text-center">
+                <img src="{{ asset('assets/images/products/' . $product->image) }}"
+                class="img-fluid rounded border"
+                style="max-height: 450px; width:100%; object-fit: cover;">
+            </div>
+
+            {{-- PRODUCT INFO --}}
+            <div class="col-md-7">
+
+                <h2 class="fw-bold mb-2">{{ $product->name }}</h2>
+
+                <p class="text-muted mb-2">
+                    Category: 
+                    <span class="fw-semibold">
+                        {{ $product->category->name ?? 'No Category' }}
+                    </span>
+                </p>
+
+                <h4 class="text-primary fw-bold mb-4">
+                    Rp {{ number_format($product->price, 0, ',', '.') }}
+                </h4>
+
+                <p class="mb-4" style="line-height: 1.6;">
+                    {{ $product->description }}
+                </p>
+
+                <a href="{{ route('user.transactions.create') }}" class="btn btn-primary px-4 py-2">
+                    Beli Sekarang
+                </a>
+
+            </div>
 
         </div>
 
-        <div class="col-md-8">
-            <h4>{{ $product->name }}</h4>
-            <p class="text-muted">{{ $product->category->name }}</p>
-
-            <h5 class="fw-bold text-primary">Rp {{ number_format($product->price,0,',','.') }}</h5>
-            <p>Stock: {{ $product->stock }}</p>
-
-            <hr>
-
-            <p>{{ $product->description }}</p>
-
-            <a href="{{ route('user.products.index') }}" class="btn btn-secondary mt-3">
-                Kembali
-            </a>
-        </div>
     </div>
+
 </div>
+
 @endsection
