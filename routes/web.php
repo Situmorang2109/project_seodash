@@ -56,19 +56,26 @@ Route::prefix('admin')
     });
 
 
-Route::prefix('user')
-    ->middleware(['auth', UserMiddleware::class])
-    ->group(function () {
+        Route::prefix('user')
+        ->middleware(['auth', UserMiddleware::class])
+        ->group(function () {
 
-        Route::get('/dashboard', [UserDashboardController::class, 'index'])->name('user.dashboard');
+            Route::get('/dashboard', [UserDashboardController::class, 'index'])
+                ->name('user.dashboard');
 
-        Route::get('/products', [UserProductController::class, 'index'])->name('user.products.index');
-        Route::get('/products/{id}', [UserProductController::class, 'show'])->name('user.products.show');
+            Route::get('/products', [UserProductController::class, 'index'])
+                ->name('user.products.index');
 
-        Route::get('/transactions', [UserTransactionController::class, 'index'])->name('user.transactions.index');
-        Route::get('/transactions/create', [UserTransactionController::class, 'create'])->name('user.transactions.create');
-        Route::post('/transactions', [UserTransactionController::class, 'store'])->name('user.transactions.store');
+            Route::get('/products/{id}', [UserProductController::class, 'show'])
+                ->name('user.products.show');
 
-        Route::get('/profile', [UserDashboardController::class, 'profile'])->name('user.profile');
-        Route::post('/profile', [UserDashboardController::class, 'updateProfile'])->name('user.profile.update');
-    });
+            Route::get('/transactions', [UserTransactionController::class, 'index'])
+                ->name('user.transactions.index');
+
+            Route::post('/transactions', [UserTransactionController::class, 'store'])
+                ->name('user.transactions.store');
+
+            Route::get('/profile', [UserDashboardController::class, 'profile'])
+                ->name('user.profile');
+        });
+

@@ -35,13 +35,14 @@ class UserTransactionController extends Controller
             'notes'      => 'nullable'
         ]);
 
-        UserTransaction::create([
-            'user_id'    => Auth::id(),
-            'product_id' => $request->product_id,
-            'type'       => $request->type,
-            'amount'     => $request->amount,
-            'notes'      => $request->notes,
-        ]);
+        Transaction::create([
+        'user_id' => auth()->id(),
+        'product_id' => $request->product_id,
+        'type' => $request->type,
+        'amount' => $request->amount,
+        'notes' => 'Pembelian Produk',
+        'date' => now()
+    ]);
 
         return redirect()
             ->route('user.transactions')
