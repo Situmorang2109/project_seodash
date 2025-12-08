@@ -1,14 +1,15 @@
 <div class="sidebar">
-    <h4 class="px-3 py-3">PENGGUNA AKUN</h4>
+    <h4 class="fw-bold mb-4">PENGGUNA AKUN</h4>
 
-    <ul class="nav flex-column">
-        <li><a href="{{ route('user.dashboard') }}" class="nav-link">Dashboard</a></li>
-        <li><a href="{{ route('user.products.index') }}" class="nav-link">Products</a></li>
-        <li><a href="{{ route('user.transactions.index') }}" class="nav-link">Transactions</a></li>
-        <li><a href="{{ route('user.profile') }}" class="nav-link">Profile</a></li>
-    </ul>
+    <a href="{{ route('user.dashboard') }}" class="menu-link {{ request()->routeIs('user.dashboard') ? 'active' : '' }}">Dashboard</a>
 
-    <form action="{{ route('logout') }}" method="POST" class="m-3">
+    <a href="{{ route('user.products.index') }}" class="menu-link {{ request()->routeIs('user.products.*') ? 'active' : '' }}">Products</a>
+
+    <a href="{{ route('user.transactions.index') }}" class="menu-link {{ request()->routeIs('user.transactions.*') ? 'active' : '' }}">Transactions</a>
+
+    <a href="{{ route('user.profile') }}" class="menu-link {{ request()->routeIs('user.profile*') ? 'active' : '' }}">Profile</a>
+
+    <form action="{{ route('logout') }}" method="POST" style="margin-top: 18px;">
         @csrf
         <button class="btn btn-danger w-100">Logout</button>
     </form>

@@ -1,50 +1,47 @@
-@extends('user.layout.app')
+@extends('user.layouts.main')
 
 @section('content')
-
-<div class="container">
-
-    <div class="card p-4 shadow-sm" style="border-radius: 14px;">
-
-        <div class="row">
-
-            {{-- PRODUCT IMAGE --}}
+<div class="container mt-4">
+    <div class="card p-4 shadow-sm">
+        <div class="row align-items-start">
+            {{-- IMAGE --}}
             <div class="col-md-5 text-center">
-                <img src="{{ asset('assets/images/products/' . $product->image) }}"
-                class="img-fluid rounded border"
-                style="max-height: 450px; width:100%; object-fit: cover;">
+                @if($product->image && file_exists(public_path('assets/images/products/' . $product->image)))
+                    <img src="{{ asset('assets/images/products/' . $product->image) }}"
+                         class="img-fluid rounded border"
+                         style="max-height: 450px; object-fit: cover;">
+                @else
+                    <img src="{{ asset('assets/images/no-image.png') }}" class="img-fluid rounded border" style="max-height:450px; object-fit:cover;">
+                @endif
             </div>
 
-            {{-- PRODUCT INFO --}}
+            {{-- INFO --}}
             <div class="col-md-7">
+                <h3 class="fw-bold mb-2">{{ $product->name }}</h3>
 
-                <h2 class="fw-bold mb-2">{{ $product->name }}</h2>
+                <p class="text-muted mb-1"><strong>Category:</strong> {{ $product->category->name ?? '-' }}</p>
 
-                <p class="text-muted mb-2">
-                    Category: 
-                    <span class="fw-semibold">
-                        {{ $product->category->name ?? 'No Category' }}
-                    </span>
-                </p>
+                <h4 class="text-primary fw-bold mb-3">Rp {{ number_format($product->price, 0, ',', '.') }}</h4>
 
-                <h4 class="text-primary fw-bold mb-4">
-                    Rp {{ number_format($product->price, 0, ',', '.') }}
-                </h4>
+                <p class="mb-3"><strong>Stock:</strong> {{ $product->stock }}</p>
 
-                <p class="mb-4" style="line-height: 1.6;">
+                <hr>
+
+                <div style="white-space: pre-line; line-height: 1.7;">
                     {{ $product->description }}
-                </p>
+                </div>
 
-                <a href="{{ route('user.transactions.create') }}" class="btn btn-primary px-4 py-2">
-                    Beli Sekarang
-                </a>
+                <div class="mt-4 d-flex gap-2">
+                    <form action="{{ route('user.transactions.create') }}" method="GET">
+                        {{-- You could pass product id as querystring to pre-select product in create --}}
+                        <input type="hidden" name="product_id" value="{{ $product->id }}">
+                        <button class="btn btn-primary">Beli Sekarang</button>
+                    </form>
 
+                    <a href="{{ route('user.products.index') }}" class="btn btn-secondary">Kembali</a>
+                </div>
             </div>
-
         </div>
-
     </div>
-
 </div>
-
 @endsection
